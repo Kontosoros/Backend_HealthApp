@@ -8,21 +8,12 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=200)
     email = models.CharField(max_length=200, unique=True)
     password = models.CharField("password", max_length=128)
-    # vat_number = models.CharField(max_length=50)
-    # photo = models.ImageField(max_length=500)
+    weigth = models.CharField(max_length=5)
+    heigth = models.CharField(max_length=5)
+    birthdate = models.CharField(max_length=15)
     def __str__(self):
-        return "Όνομα: " + str(self.name) + " Επώνυμο:" + self.last_name + "email: " + self.email
+        return "Όνομα: " + str(self.name) + " Επώνυμο:" + self.last_name + "email: " + self.email+ "weigth: " + self.weigth+ "heigth: " + self.heigth
 
-
-class Pattient(models.Model):
-    name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    email = models.EmailField()
-    phone = models.CharField(max_length=50)
-    Fk_userID = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "Όνομα: " + str(self.name) + " Επώνυμο: " + self.last_name + " email: " + self.email + " Τηλέφωνο: " + str(self.phone)
 
 
 class UserToken(models.Model):
