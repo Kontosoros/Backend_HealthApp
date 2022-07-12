@@ -1,0 +1,1 @@
+C:\Users\mkont\.virtualenvs\venv\Scripts\activate.bat

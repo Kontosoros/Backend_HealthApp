@@ -1,0 +1,1 @@
+C:\Users\mkont\.virtualenvs_for_testing\testing_env\Scripts
