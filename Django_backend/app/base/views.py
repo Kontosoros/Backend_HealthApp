@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 from .authentication import *
 from django.utils import timezone
-
+from .load_models.load_ai_models import use_ai_diabetes , use_ai_heart_disease
 
 class Register(APIView):
     def post(self, request):
@@ -66,7 +66,7 @@ class DiagnosticAPIView(APIView):
         insulin = body['insulin']
         bmi = body['bmi']
         diabetespedigree = body['diabetespedigree']
-        sex = body['sex']
+        sex = 1 if body['sex'] == 'male' else 0
         trtbps = body['trtbps']
         chol = body['chol']
         fbs = body['fbs']
@@ -79,25 +79,27 @@ class DiagnosticAPIView(APIView):
         if user_in_db.exists():
             return Response({"user exist": True})
         else:
-            diagnostic_db = Diagnostic(
-                age=age,
-                pregnancies=pregnancies,
-                glucose=glucose,
-                bloodpressure=bloodpressure,
-                skinthickness=skinthickness,
-                insulin=insulin,
-                bmi=bmi,
-                diabetespedigree=diabetespedigree,
-                sex=sex,
-                trtbps=trtbps,
-                chol=chol,
-                fbs=fbs,
-                thalachh=thalachh,
-                exng=exng,
-                thall=thall,
-                user_id=user_id
-            )
-            diagnostic_db.save()
+            diabetes_ai_result = use_ai_diabetes([[pregnancies,glucose,bloodpressure,skinthickness,insulin,bmi,diabetespedigree,age]])
+            heart_ai_result = use_ai_heart_disease([[age,sex,trtbps,chol,fbs,thalachh,exng,thall]])
+            # diagnostic_db = Diagnostic(
+            #     age=age,
+            #     pregnancies=pregnancies,
+            #     glucose=glucose,
+            #     bloodpressure=bloodpressure,
+            #     skinthickness=skinthickness,
+            #     insulin=insulin,
+            #     bmi=bmi,
+            #     diabetespedigree=diabetespedigree,
+            #     sex=sex,
+            #     trtbps=trtbps,
+            #     chol=chol,
+            #     fbs=fbs,
+            #     thalachh=thalachh,
+            #     exng=exng,
+            #     thall=thall,
+            #     user_id=user_id
+            # )
+            # diagnostic_db.save()
             return Response({"user not exist": True})
 
 
