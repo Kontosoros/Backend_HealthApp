@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
-    user = models.Field(primary_key = True)
     email = models.CharField(max_length=200)
     password = models.CharField("password", max_length=128)
     name = models.CharField(max_length=200)
@@ -20,8 +19,8 @@ class UserToken(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     expired_at = models.DateTimeField()
 
-class Diagnostics(models.Model):
-    person = models.ForeignKey(User, on_delete=models.CASCADE)
+class Diagnostic(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     age = models.SmallIntegerField(null=True)
     pregnancies  = models.SmallIntegerField(null=True)
     glucose = models.SmallIntegerField(null=True)

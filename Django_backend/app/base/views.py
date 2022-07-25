@@ -27,9 +27,9 @@ class LoginAPIView(APIView):
             raise APIException("Invalid Credentials")
         if not user.check_password(password):
             raise APIException("Invalid Credentials")
-        access_token = create_access_token(user.user)
-        refresh_token = create_refresh_token(user.user)
-        UserToken.objects.create(user_id=user.user, token=refresh_token, expired_at=datetime.datetime.utcnow() + datetime.timedelta(days=7))
+        access_token = create_access_token(user.id)
+        refresh_token = create_refresh_token(user.id)
+        UserToken.objects.create(user_id=user.id, token=refresh_token, expired_at=datetime.datetime.utcnow() + datetime.timedelta(days=7))
         response = Response()
         response.set_cookie(key="refresh_token", value=refresh_token, httponly=True)  # , samesite="none", secure=True)
         response.data = {"token": access_token, "refresh_token": refresh_token, "staff": user.is_staff}
@@ -55,21 +55,50 @@ class RefreshAPIView(APIView):
         return Response({"token": access_token})
 
 
-
-
 class DiagnosticAPIView(APIView):
     def post(self, request):
-        diagnostic_values = Diagnostics(data = request.data)
-        if diagnostic_values.is_valid(raise_exception=True):
-            diagnostic_values.save(diagnostic_values=diagnostic_values)
-        
-            
-
-        return Response({"answer": True})
-
-
-
-
+        body = json.loads(request.body.decode('utf-8'))
+        age = body['age']
+        pregnancies = body['pregnancies']
+        glucose = body['glucose']
+        bloodpressure = body['bloodpressure']
+        skinthickness = body['skinthickness']
+        insulin = body['insulin']
+        bmi = body['bmi']
+        diabetespedigree = body['diabetespedigree']
+        sex = body['sex']
+        trtbps = body['trtbps']
+        chol = body['chol']
+        fbs = body['fbs']
+        thalachh = body['thalachh']
+        exng = body['exng']
+        thall = body['thall']
+        user_id = body['user']
+        queryset = Diagnostic.objects.filter
+        user_in_db = queryset(user_id=user_id)
+        if user_in_db.exists():
+            return Response({"user exist": True})
+        else:
+            diagnostic_db = Diagnostic(
+                age=age,
+                pregnancies=pregnancies,
+                glucose=glucose,
+                bloodpressure=bloodpressure,
+                skinthickness=skinthickness,
+                insulin=insulin,
+                bmi=bmi,
+                diabetespedigree=diabetespedigree,
+                sex=sex,
+                trtbps=trtbps,
+                chol=chol,
+                fbs=fbs,
+                thalachh=thalachh,
+                exng=exng,
+                thall=thall,
+                user_id=user_id
+            )
+            diagnostic_db.save()
+            return Response({"user not exist": True})
 
 
 @api_view(["POST"])
