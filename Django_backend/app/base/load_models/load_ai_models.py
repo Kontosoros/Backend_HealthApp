@@ -1,6 +1,6 @@
 import pickle
 diabetes_model_path = "base/save_models/diabetes_classifier_model.sav"
-heartattack_model_path = "base/save_models/diabetes_classifier_model.sav"
+heartattack_model_path = "base/save_models/heart_attack_classifier_model.sav"
 
 def use_ai_diabetes(test_values=[[]]):
     loaded_model = pickle.load(open(diabetes_model_path, 'rb'))   
