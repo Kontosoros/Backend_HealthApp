@@ -36,5 +36,7 @@ class Diagnostic(models.Model):
     thalachh = models.SmallIntegerField(null=True)
     exng = models.SmallIntegerField(null=True)
     thall = models.SmallIntegerField(null=True)
+    diabetes_ai_result = models.CharField(max_length=5)
+    heart_disease_ai_result = models.CharField(max_length=5)
 
 

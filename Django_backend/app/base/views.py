@@ -74,33 +74,30 @@ class DiagnosticAPIView(APIView):
         exng = body['exng']
         thall = body['thall']
         user_id = body['user']
-        queryset = Diagnostic.objects.filter
-        user_in_db = queryset(user_id=user_id)
-        if user_in_db.exists():
-            return Response({"user exist": True})
-        else:
-            diabetes_ai_result = use_ai_diabetes([[pregnancies,glucose,bloodpressure,skinthickness,insulin,bmi,diabetespedigree,age]])
-            heart_ai_result = use_ai_heart_disease([[age,sex,trtbps,chol,fbs,thalachh,exng,thall]])
-            # diagnostic_db = Diagnostic(
-            #     age=age,
-            #     pregnancies=pregnancies,
-            #     glucose=glucose,
-            #     bloodpressure=bloodpressure,
-            #     skinthickness=skinthickness,
-            #     insulin=insulin,
-            #     bmi=bmi,
-            #     diabetespedigree=diabetespedigree,
-            #     sex=sex,
-            #     trtbps=trtbps,
-            #     chol=chol,
-            #     fbs=fbs,
-            #     thalachh=thalachh,
-            #     exng=exng,
-            #     thall=thall,
-            #     user_id=user_id
-            # )
-            # diagnostic_db.save()
-            return Response({"user not exist": True})
+        diabetes_ai_result = use_ai_diabetes([[pregnancies,glucose,bloodpressure,skinthickness,insulin,bmi,diabetespedigree,age]])
+        heart_ai_result = use_ai_heart_disease([[age,sex,trtbps,chol,fbs,thalachh,exng,thall]])
+        diagnostic_db = Diagnostic(
+            age=age,
+            pregnancies=pregnancies,
+            glucose=glucose,
+            bloodpressure=bloodpressure,
+            skinthickness=skinthickness,
+            insulin=insulin,
+            bmi=bmi,
+            diabetespedigree=diabetespedigree,
+            sex=sex,
+            trtbps=trtbps,
+            chol=chol,
+            fbs=fbs,
+            thalachh=thalachh,
+            exng=exng,
+            thall=thall,
+            user_id=user_id,
+            diabetes_ai_result = diabetes_ai_result,
+            heart_disease_ai_result = heart_ai_result
+        )
+        diagnostic_db.save()
+        return Response({"user not exist": True})
 
 
 @api_view(["POST"])
