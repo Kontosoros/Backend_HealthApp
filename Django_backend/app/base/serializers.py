@@ -7,7 +7,7 @@ from .models import *
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "name", "email", "last_name", "password", "username","weigth","heigth","birthdate","is_staff"]
+        fields = ["user", "name", "email", "last_name", "password", "username","weigth","heigth","birthdate","is_staff"]
         extra_kwargs = {
             "password": {'write_only': True}
         }
@@ -18,3 +18,12 @@ class UsersSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+class Diagnostics(serializers.ModelSerializer):
+    class Meta:
+        model = Diagnostics
+        fields = '__all__'
+        
+        
+       
+        

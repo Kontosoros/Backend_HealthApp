@@ -27,9 +27,9 @@ class LoginAPIView(APIView):
             raise APIException("Invalid Credentials")
         if not user.check_password(password):
             raise APIException("Invalid Credentials")
-        access_token = create_access_token(user.id)
-        refresh_token = create_refresh_token(user.id)
-        UserToken.objects.create(user_id=user.id, token=refresh_token, expired_at=datetime.datetime.utcnow() + datetime.timedelta(days=7))
+        access_token = create_access_token(user.user)
+        refresh_token = create_refresh_token(user.user)
+        UserToken.objects.create(user_id=user.user, token=refresh_token, expired_at=datetime.datetime.utcnow() + datetime.timedelta(days=7))
         response = Response()
         response.set_cookie(key="refresh_token", value=refresh_token, httponly=True)  # , samesite="none", secure=True)
         response.data = {"token": access_token, "refresh_token": refresh_token, "staff": user.is_staff}
@@ -53,6 +53,23 @@ class RefreshAPIView(APIView):
             raise exceptions.AuthenticationFailed("unauthenticated")
         access_token = create_access_token(id)
         return Response({"token": access_token})
+
+
+
+
+class DiagnosticAPIView(APIView):
+    def post(self, request):
+        diagnostic_values = Diagnostics(data = request.data)
+        if diagnostic_values.is_valid(raise_exception=True):
+            diagnostic_values.save(diagnostic_values=diagnostic_values)
+        
+            
+
+        return Response({"answer": True})
+
+
+
+
 
 
 @api_view(["POST"])
